@@ -1,0 +1,109 @@
+CREATE TABLE Employee(
+EmployeeID int IDENTITY(1,1) NOT NULL,
+FirstName varchar(20) NOT NULL,
+LastName varchar(30) NOT NULL,
+MI char(1),
+HouseNumber varchar(10) NOT NULL,
+Street Varchar(20) NOT NULL,
+CityCounty Varchar(25) NOT NULL,
+StateAbb Char(2) NULL,
+CountryAbb Char(2) NOT NULL,
+Zip Char(5) NOT NULL,
+DateOfBirth date NOT NULL,
+HireDate date NOT NULL,
+TerminationDate date NULL,
+Salary money NOT NULL,
+ManagerID integer NULL,
+LastUpdatedBy varchar(50) NOT NULL,
+LastUpdated date NOT NULL,
+CONSTRAINT PK_Employee PRIMARY KEY (EmployeeID),
+CONSTRAINT FK_Employee FOREIGN KEY (ManagerID) references Employee);
+CREATE TABLE Project(
+ProjectID integer IDENTITY(1,1) NOT NULL,
+ProjectName Varchar(35) NOT NULL,
+ProjectDescription Varchar(100) NOT NULL,
+LastUpdatedBy varchar(50) NOT NULL,
+LastUpdated date NOT NULL,
+CONSTRAINT PK_Project PRIMARY KEY (ProjectID))
+CREATE TABLE EmployeeProject(
+EmployeeID int NOT NULL,
+ProjectID integer NOT NULL,
+ProjectEmployeeStartDate date NOT NULL,
+ProjectEmployeeEndDate date NULL,
+LastUpdatedBy varchar(50) NOT NULL,
+LastUpdated date NOT NULL,
+CONSTRAINT PK_EmployeeProject PRIMARY KEY (EmployeeID, ProjectID),
+CONSTRAINT FK_EmployeeProjectEmployee FOREIGN KEY (EmployeeID)
+references Employee,
+CONSTRAINT FK_EmployeeProjectProject FOREIGN KEY (ProjectID) references
+Project);
+CREATE TABLE Skill(
+SkillID integer IDENTITY(1,1) NOT NULL,
+SkillName Varchar(35) NOT NULL,
+SkillDescription Varchar(90) NOT NULL,
+LastUpdatedBy varchar(50) NOT NULL,
+LastUpdated date NOT NULL,
+CONSTRAINT PK_Skill PRIMARY KEY (SkillID))
+CREATE TABLE EmployeeSkill(
+EmployeeID int NOT NULL,
+SkillID integer NOT NULL,
+LastUpdatedBy varchar(50) NOT NULL,
+LastUpdated date NOT NULL,
+CONSTRAINT PK_EmployeeSkill PRIMARY KEY (EmployeeID, SkillID),
+CONSTRAINT FK_EmployeeSkillEmployee FOREIGN KEY (EmployeeID) references
+Employee,
+CONSTRAINT FK_EmployeeSkillSkill FOREIGN KEY (SkillID) references Skill);
+
+USE [Lab3]
+GO
+INSERT INTO [dbo].[Skill]
+           ([SkillName]
+           ,[SkillDescription]
+           ,[LastUpdatedBy]
+           ,[LastUpdated])
+     VALUES
+			('NONE','NONE','John Morrissey','2018-01-01'),
+           ('PROGRAMMING','Planning and Developing Systems','John Morrissey','2018-01-01'),
+			('SYSTEMS ARCHITECTURE','Analysis and Designing Technical Systems','Steve Smith','2018-01-01')
+GO
+
+USE [Lab3]
+GO
+
+INSERT INTO [dbo].[Project]
+           ([ProjectName]
+           ,[ProjectDescription]
+           ,[LastUpdatedBy]
+           ,[LastUpdated])
+     VALUES
+			('NONE','NONE','John Morrissey','2018-01-01'),
+           ('DELPHI','Providing technical assistance to DOD','John Morrissey','2018-01-01'),
+			('MIRABELLA','Systesms architecture & development','Robert Himenez','2018-01-01')
+GO
+
+USE [Lab3]
+GO
+
+INSERT INTO [dbo].[Employee]
+           ([FirstName]
+           ,[LastName]
+           ,[MI]
+           ,[HouseNumber]
+           ,[Street]
+           ,[CityCounty]
+           ,[StateAbb]
+           ,[CountryAbb]
+           ,[Zip]
+           ,[DateOfBirth]
+           ,[HireDate]
+           ,[TerminationDate]
+           ,[Salary]
+           ,[ManagerID]
+           ,[LastUpdatedBy]
+           ,[LastUpdated])
+     VALUES
+           ('Patrick','Morrissey','J','3536','Carroll Creek Road','Keswick','VA','US','22801','1995-02-22','2018-01-01','2018-02-01',54000,null,'Update Person','2018-01-01'),
+		   ('Robert','Clark','H','452B','Tydfil Court','Harrisonburg','VA','US','22030','1990-08-16','2015-02-21','2017-01-01',75000,1,'Update Person','2018-01-01'),
+		   ('Madison','Deacon','G','1800','Tyraena Lane','Lynchburg','VA','US','22947','1989-08-16','2014-01-01',null,65000,1,'Update Person','2018-01-01')
+GO
+
