@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.SqlClient;
 
 
 /* John Morrissey Lab 2
@@ -13,9 +14,11 @@ using System.Web.UI.WebControls;
 */
 public partial class Default3 : System.Web.UI.Page
 {
+    protected static int projectID;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        //ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertmessage", "alert('Please enter your name')", true);
+        
         
         
     }
@@ -113,5 +116,84 @@ public partial class Default3 : System.Web.UI.Page
             lblAlert.Text += c;
             return false;
         }
+    }
+
+    protected void btnSearch_Click(object sender, EventArgs e)
+    {
+        
+    }
+
+
+
+
+
+    protected void projectGridView_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+        GridViewRow row = projectGridView.SelectedRow;
+        projectID = Int32.Parse(row.Cells[1].Text);
+
+        editProjName.Text = row.Cells[2].Text;
+        editProjDesc.Text = row.Cells[3].Text;
+
+        Control[] ctrlArray = new Control[] { lblEditProjectName, lblEditProjectDesc, editProjDesc, editProjName, btnUpdateProj };
+        foreach(Control element in ctrlArray)
+        {
+            element.Visible = true;
+        }
+        btnUpdateProj.Enabled = true;
+
+        
+        
+    }
+
+    protected void btnUpdateProj_Click(object sender, EventArgs e)
+    {
+        Boolean ensureEntries = true;
+        if (editProjName.Text == "")
+        {
+            ensureEntries = false;
+            lblAlert.Text = "Please enter a project name in the field provided.";
+            editProjName.Focus();
+        }
+        if (editProjDesc.Text == "")
+        {
+            ensureEntries = false;
+            lblAlert.Text = "Please enter a project description in the field provided.";
+            editProjDesc.Focus();
+        }
+
+        if (ensureEntries)
+            try
+            {
+                SqlConnection sqlc = connectToDB();
+                string commandText = "UPDATE [dbo].[Project] SET ProjectName = @ProjectName, ProjectDescription = @ProjectDescription, LastUpdated = @LastUpdated, LastUpdatedBy = @LastUpdatedBy " +
+                    "WHERE ProjectID =" + projectID;
+
+                SqlCommand update = new SqlCommand(commandText, sqlc);
+
+                update.Parameters.AddWithValue("@ProjectName", editProjName.Text);
+                update.Parameters.AddWithValue("@ProjectDescription", editProjDesc.Text);
+                update.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
+                update.Parameters.AddWithValue("@LastUpdatedBy", (string)Session["user"]);
+
+                update.ExecuteNonQuery();
+                sqlc.Close();
+
+                Control[] ctrlArray = new Control[] { lblEditProjectName, lblEditProjectDesc, editProjDesc, editProjName, btnUpdateProj };
+                foreach (Control element in ctrlArray)
+                {
+                    element.Visible = false;
+                }
+
+                projectGridView.DataBind();
+                lblAlert.Text = "The Project was updated.";
+                btnUpdateProj.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+            
+                lblAlert.Text += "Please ensure your update is entered properly.\n\n" + ex;
+            }
     }
 }

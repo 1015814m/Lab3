@@ -107,3 +107,27 @@ INSERT INTO [dbo].[Employee]
 		   ('Madison','Deacon','G','1800','Tyraena Lane','Lynchburg','VA','US','22947','1989-08-16','2014-01-01',null,65000,1,'Update Person','2018-01-01')
 GO
 
+
+CREATE PROCEDURE JohnMorrisseySkillInsert
+	
+		@SkillName varchar(35),
+		@SkillDescription varchar(90),
+		@LastUpdatedBy varchar(50),
+		@LastUpdated date
+
+	AS
+
+	Set NOCOUNT ON 
+
+	INSERT INTO [dbo].[Skill]
+		([SkillName]
+		,[SkillDescription]
+		,[LastUpdatedBy]
+		,[LastUpdated])
+	VALUES
+		(@SkillName
+		,@SkillDescription
+		,@LastUpdatedBy
+		,@LastUpdated)
+GO
+

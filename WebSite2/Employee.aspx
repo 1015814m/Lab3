@@ -119,9 +119,8 @@
         
         <aside >
             <br />
-            <asp:GridView  style="float: left;" AutoGenerateEditButton="true"  ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="EMPLOYEEID" DataSourceID="SqlGridView" AllowPaging="True" AllowSorting="True" Font-Size="Small" Width="50%" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" >
+            <asp:GridView  style="float: left;"   ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="EMPLOYEEID" DataSourceID="SqlGridView" AllowPaging="True" AllowSorting="True" Font-Size="Small" Width="50%" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" >
                 <Columns>
-                    <asp:CommandField ShowSelectButton="True"  />
                     <asp:BoundField DataField="EMPLOYEEID" HeaderText="EMPLOYEEID" InsertVisible="False" ReadOnly="True" SortExpression="EMPLOYEEID" />
                     <asp:BoundField DataField="FIRSTNAME" HeaderText="FIRSTNAME" SortExpression="FIRSTNAME" />
                     <asp:BoundField DataField="LASTNAME" HeaderText="LASTNAME" SortExpression="LASTNAME" />

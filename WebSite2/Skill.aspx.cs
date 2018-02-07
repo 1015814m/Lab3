@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data.SqlClient;
 
 /* John Morrissey Lab 2
  * I followed the honor code:
@@ -27,21 +28,25 @@ public partial class Default2 : System.Web.UI.Page
 
             try
             {
+                //connect to the database - this also opens the connection
                 System.Data.SqlClient.SqlConnection sqlc = connectToDB();
+                //create a new sql command
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("JohnMorrisseySkillInsert", sqlc);
+                //specify that the command is a stored procedure
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                //add the parameters to the command
+                cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@skillName", newSkill.SkillName));
+                cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@skillDescription", newSkill.SkillDescription));
+                cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@lastUpdatedBy", newSkill.LastUpdatedBy));
+                cmd.Parameters.Add(new System.Data.SqlClient.SqlParameter("@lastUpdated", newSkill.LastUpdated));
 
-                string commandText = "insert into [dbo].[SKILL] values (@skillName, @skillDescription, @lastUpdatedBy, @lastUpdated)";
-
-                //Creates the sql statement
-                System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand(commandText, sqlc);
-
-                insert.Parameters.AddWithValue("@skillName", newSkill.SkillName);
-                insert.Parameters.AddWithValue("@skillDescription", newSkill.SkillDescription);
-                insert.Parameters.AddWithValue("@lastUpdatedBy", newSkill.LastUpdatedBy);
-                insert.Parameters.AddWithValue("@lastUpdated", newSkill.LastUpdated);
-
-                lblAlert.Text = newSkill.SkillName + " was added to the database.";
-                insert.ExecuteNonQuery();
+                
+                //execute the query
+                cmd.ExecuteNonQuery();
+                //close the connection
                 sqlc.Close();
+                //print a line that states the new item was added to the database
+                lblAlert.Text = newSkill.SkillName + " was added to the database.";
             }
             catch (Exception)
             {
